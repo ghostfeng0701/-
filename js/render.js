@@ -1031,6 +1031,10 @@ function renderSettingsPage() {
         <span class="settings-item__label">📤 导出数据</span>
         <span class="settings-item__value">JSON →</span>
       </div>
+      <div class="settings-item" id="setting-email-export">
+        <span class="settings-item__label">✉️ 邮件发送备份</span>
+        <span class="settings-item__value" id="email-export-status">一键发送 →</span>
+      </div>
       <div class="settings-item" id="setting-import">
         <span class="settings-item__label">📥 导入数据</span>
         <span class="settings-item__value">选择文件 →</span>
@@ -1109,6 +1113,33 @@ function bindSettingsEvents() {
       showToast('同步失败: ' + e.message, 'error');
     }
     await updateSyncStatusUI();
+  });
+
+  // 邮件发送备份
+  document.getElementById('setting-email-export')?.addEventListener('click', async () => {
+    const status = document.getElementById('email-export-status');
+    if (status) status.textContent = '准备中...';
+    try {
+      const data = await exportAllData();
+      const json = JSON.stringify(data);
+      const date = formatDate();
+      const subject = `日积跬步数据备份 ${date}`;
+      const body = `这是我的日积跬步数据备份，请妥善保存。\n\n${json}`;
+
+      // Android APK 环境：调用原生桥接发送邮件附件
+      if (typeof HabitTrackerAndroid !== 'undefined' && HabitTrackerAndroid.isAndroidApp && HabitTrackerAndroid.isAndroidApp()) {
+        HabitTrackerAndroid.exportDataViaEmail(json, date);
+        showToast('✉️ 已打开邮件客户端', 'success');
+      } else {
+        // 浏览器环境：mailto 回退
+        const mailto = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        window.location.href = mailto;
+        showToast('✉️ 请手动发送邮件', 'info');
+      }
+    } catch (e) {
+      showToast('导出失败: ' + e.message, 'error');
+    }
+    if (status) status.textContent = '一键发送 →';
   });
 
   // 登录入口

@@ -100,7 +100,7 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   position: relative;
-  padding-bottom: calc(var(--nav-height) + var(--space-lg));
+  padding-bottom: calc(var(--nav-height) + var(--space-2xl) + env(safe-area-inset-bottom));
 }
 
 /* ---------- 顶部导航栏 ---------- */
@@ -112,7 +112,9 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: var(--space-sm) var(--space-md);
+  padding-top: max(var(--space-sm), env(safe-area-inset-top));
   height: var(--header-height);
+  min-height: calc(var(--header-height) + env(safe-area-inset-top));
   background: rgba(10, 14, 23, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -480,7 +482,8 @@ body {
   -webkit-backdrop-filter: blur(20px);
   border-top: 1px solid rgba(255,255,255,0.06);
   padding: var(--space-sm) 0;
-  padding-bottom: max(var(--space-sm), env(safe-area-inset-bottom));
+  padding-bottom: max(var(--space-md), env(safe-area-inset-bottom));
+  padding-top: max(var(--space-sm), env(safe-area-inset-top));
   z-index: 100;
 }
 
@@ -511,7 +514,7 @@ body {
 .page {
   display: none;
   padding: var(--space-md);
-  padding-bottom: calc(var(--nav-height) + var(--space-2xl));
+  padding-bottom: calc(var(--nav-height) + var(--space-2xl) + env(safe-area-inset-bottom));
 }
 
 .page--active {
