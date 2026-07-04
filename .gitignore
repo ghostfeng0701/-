@@ -1,0 +1,13 @@
+# Android Gradle cache
+android/.gradle/
+android/build/
+android/local.properties
+*.idsig
+*.log
+
+# Node
+node_modules/
+
+# System
+.DS_Store
+Thumbs.db
